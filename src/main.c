@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 22:59:55 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/12 23:15:33 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/13 10:17:48 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int init_mutex(t_shared *shared)
     pthread_mutex_init(&shared->lock_d, NULL);
     pthread_mutex_init(&shared->lock_t, NULL);
     pthread_mutex_init(&shared->lock_m, NULL);
+    pthread_mutex_init(&shared->lock_p, NULL);
     return 0;
 }
 
@@ -105,16 +106,12 @@ int main(int ac, char **argv)
     t_shared commun;
     t_philo *philos;
 
-    // parse arguments
     if (parse_arg(ac, argv, &commun))
         return -2;
-    // init mutex
     if (init_mutex(&commun))
         return -2;
-    // init + pholos
     if (init_philo(&commun, &philos))
         return -2;
-    // run threads
     if (threads(&commun, philos))
         return -2;
     return 0;

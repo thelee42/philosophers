@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:03:03 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/12 23:17:38 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/13 10:31:44 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_shared
     pthread_mutex_t lock_d;
     pthread_mutex_t lock_t;
     pthread_mutex_t lock_m;
+    pthread_mutex_t lock_p;
 } t_shared;
 
 typedef struct s_philo
@@ -56,16 +57,20 @@ int threads(t_shared *shared, t_philo *philos);
 int init_philo(t_shared *shared, t_philo **philos);
 
 // thread.c
-void destroy_mutex(t_shared *shared);
 void *philosophers(void *arg);
-void philo_sleep(t_philo *philo);
-void philo_eat(t_philo *philo);
 void philo_fork(t_philo *philo);
+void philo_eat(t_philo *philo);
+void philo_sleep(t_philo *philo);
+void philo_think(t_philo *philo);
+
 
 // monitor.c
 void *thread_death_monitor(void *arg);
 int are_philos_full(t_philo *philos);
-int is_philo_full(t_philo *philos);
+void death_mark(t_philo *philo);
+
+//thread_utils.c
+void destroy_mutex(t_shared *shared);
 int stop_philo(t_philo *philo);
 
 // utils.c

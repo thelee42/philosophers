@@ -1,7 +1,7 @@
 
 # CC = cc
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g3 -pthread
+CFLAGS = -Wall -Werror -Wextra -g3 -pthread -fsanitize=thread
 
 SRC_DIR = src
 OBJ_DIR = objet
