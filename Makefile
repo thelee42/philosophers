@@ -3,16 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: thealee <thealee@student.42.fr>            +#+  +:+       +#+         #
+#    By: thelee <thelee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/15 11:45:48 by thealee           #+#    #+#              #
-#    Updated: 2025/03/15 11:45:51 by thealee          ###   ########.fr        #
+#    Updated: 2025/03/16 16:50:45 by thelee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# CC = cc
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g3 -pthread -fsanitize=thread # fsanitize out
+CC = cc
+CFLAGS = -Wall -Werror -Wextra -pthread
 
 SRC_DIR = src
 OBJ_DIR = objet
