@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:03:03 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/13 10:31:44 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/16 00:26:16 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MONITOR 5000
-
 typedef struct s_shared
 {
     int num_philos;
-    int start_tv;
-    int time_die;
-    int time_eat;
-    int time_sleep;
+    int turn;
+    long long start_tv;
+    long long time_die;
+    long long time_eat;
+    long long time_sleep;
     int min_meal;
     int is_dead;
     pthread_mutex_t *forks;
     pthread_mutex_t lock_d;
-    pthread_mutex_t lock_t;
     pthread_mutex_t lock_m;
     pthread_mutex_t lock_p;
+    pthread_mutex_t lock_turn;
+    pthread_mutex_t *lock_t;
 } t_shared;
 
 typedef struct s_philo
 {
     int name;
     int meals;
-    int turn;
-    int last_eat;
+    long long last_eat;
     pthread_mutex_t *fork_r;
     pthread_mutex_t *fork_l;
+    pthread_mutex_t *lock_t;
     t_shared *shared;
 } t_philo;
 
@@ -63,21 +63,24 @@ void philo_eat(t_philo *philo);
 void philo_sleep(t_philo *philo);
 void philo_think(t_philo *philo);
 
-
 // monitor.c
 void *thread_death_monitor(void *arg);
 int are_philos_full(t_philo *philos);
 void death_mark(t_philo *philo);
 
+
 //thread_utils.c
 void destroy_mutex(t_shared *shared);
 int stop_philo(t_philo *philo);
+void    write_lock(t_philo *philo, char *str);
+int dead_philo(t_philo *philo);
 
 // utils.c
 int ft_atoi(const char *str);
 int is_all_digit(char **argv);
-int cur_time();
-int timestamp(int start_tv);
-void ft_msleep(int sleep);
+long long cur_time();
+//void ft_msleep(int sleep);
+void precise_usleep(long long usec);
+//long long get_elapsed_time_microseconds(struct timeval start, struct timeval end);
 
 #endif

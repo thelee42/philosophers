@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 22:59:55 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/13 10:17:48 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/16 11:18:58 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ int init_philo(t_shared *shared, t_philo **philos)
         (*philos)[i].name = i + 1;
         (*philos)[i].meals = 0;
         (*philos)[i].last_eat = cur_time();
-        (*philos)[i].fork_r = &shared->forks[(i + 1) % shared->num_philos];
         (*philos)[i].fork_l = &shared->forks[i];
+        (*philos)[i].fork_r = &shared->forks[(i + 1) % shared->num_philos];
+        (*philos)[i].lock_t = &shared->lock_t[i];
         (*philos)[i].shared = shared;
         i++;
     }
@@ -41,13 +42,22 @@ int init_mutex(t_shared *shared)
     shared->forks = malloc(sizeof(pthread_mutex_t) * shared->num_philos);
     if (!shared->forks)
         return 1;
+    shared->lock_t = malloc(sizeof(pthread_mutex_t) * shared->num_philos);
+    if (!shared->lock_t)
+    {
+        free(shared->forks);
+        return 1;
+    }
     i = 0;
     while (i < shared->num_philos)
         pthread_mutex_init(&shared->forks[i++], NULL);
+    i = 0;
+    while (i < shared->num_philos)
+        pthread_mutex_init(&shared->lock_t[i++], NULL);
     pthread_mutex_init(&shared->lock_d, NULL);
-    pthread_mutex_init(&shared->lock_t, NULL);
     pthread_mutex_init(&shared->lock_m, NULL);
     pthread_mutex_init(&shared->lock_p, NULL);
+    pthread_mutex_init(&shared->lock_turn, NULL);
     return 0;
 }
 
@@ -62,12 +72,17 @@ int parse_arg(int ac, char **argv, t_shared *shared)
     if (!ft_atoi(argv[1]))
         return (printf("No philosopher on the table\n"));
     shared->num_philos = ft_atoi(argv[1]);
+    shared->turn = 0;
     shared->start_tv = cur_time();
     shared->time_die = ft_atoi(argv[2]);
     shared->time_eat = ft_atoi(argv[3]);
     shared->time_sleep = ft_atoi(argv[4]);
     if (ac == 6)
+    {
         shared->min_meal = ft_atoi(argv[5]);
+        if (!shared->min_meal)
+            return(printf("No meal on the table\n"));
+    }
     else
         shared->min_meal = 0;
     shared->is_dead = 0;

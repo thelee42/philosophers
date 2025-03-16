@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:00:11 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/13 10:31:54 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/16 11:16:38 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int are_philos_full(t_philo *philos)
     int i;
     int full_philo;
 
-    if(!philos[0].shared->min_meal)
+    if(philos[0].shared->min_meal == 0)
         return 0;
     full_philo = 0;
     i = 0;
@@ -32,16 +32,13 @@ int are_philos_full(t_philo *philos)
     }
     if (full_philo == philos[0].shared->num_philos)
         return 1;
-    else
-        return 0;
+    return 0;
 }
 
 void    death_mark(t_philo *philo)
 {
+    write_lock(philo, "died");
     pthread_mutex_lock(&philo->shared->lock_d);
-    pthread_mutex_lock(&philo->shared->lock_p);
-    printf("%d %d died\n", timestamp(philo->shared->start_tv), philo->name);
-    pthread_mutex_unlock(&philo->shared->lock_p);
     philo->shared->is_dead = 1;
     pthread_mutex_unlock(&philo->shared->lock_d);
 }
@@ -52,23 +49,23 @@ void *thread_death_monitor(void *arg)
     int i;
 
     philos = (t_philo *)arg;
-    while (1)
+    while (!philos->shared->is_dead)
     {
         if (are_philos_full(philos))
             return NULL;
         i = 0;
         while (i < philos[0].shared->num_philos)
         {
-            pthread_mutex_lock(&philos[i].shared->lock_t);
-            if (timestamp(philos[i].last_eat) > philos[i].shared->time_die)
+            pthread_mutex_lock(philos[i].lock_t);
+            if (cur_time() - philos[i].last_eat > philos[i].shared->time_die)
             {
+                pthread_mutex_unlock(philos[i].lock_t);
                 death_mark(&philos[i]);
-                pthread_mutex_unlock(&philos[i].shared->lock_t);
                 return NULL;
             }
-            pthread_mutex_unlock(&philos[i++].shared->lock_t);
-            usleep(MONITOR);
+            pthread_mutex_unlock(philos[i].lock_t);
+            i++;
         }
     }
+    return NULL;
 }
-
