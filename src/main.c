@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 22:59:55 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/16 11:18:58 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:20:55 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int parse_arg(int ac, char **argv, t_shared *shared)
     if (!ft_atoi(argv[1]))
         return (printf("No philosopher on the table\n"));
     shared->num_philos = ft_atoi(argv[1]);
-    shared->turn = 0;
+    shared->rest_turn = 1;
     shared->start_tv = cur_time();
     shared->time_die = ft_atoi(argv[2]);
     shared->time_eat = ft_atoi(argv[3]);

@@ -6,16 +6,16 @@
 #    By: thealee <thealee@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/15 11:45:48 by thealee           #+#    #+#              #
-#    Updated: 2025/03/15 11:45:51 by thealee          ###   ########.fr        #
+#    Updated: 2025/03/17 10:15:16 by thealee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # CC = cc
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g3 -pthread -fsanitize=thread # fsanitize out
+CFLAGS = -Wall -Werror -Wextra -pthread
 
 SRC_DIR = src
-OBJ_DIR = objet
+OBJ_DIR = .objet
 INC_DIR = include
 
 INCLUDES = -I$(SRC_DIR) -I$(INC_DIR)

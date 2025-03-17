@@ -6,7 +6,7 @@
 /*   By: thealee <thealee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 23:03:03 by thealee           #+#    #+#             */
-/*   Updated: 2025/03/16 00:26:16 by thealee          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:16:44 by thealee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@
 typedef struct s_shared
 {
     int num_philos;
-    int turn;
     long long start_tv;
     long long time_die;
     long long time_eat;
     long long time_sleep;
     int min_meal;
     int is_dead;
+    int rest_turn;
     pthread_mutex_t *forks;
     pthread_mutex_t lock_d;
     pthread_mutex_t lock_m;
